@@ -3,8 +3,10 @@ import { ConfigModule, ConfigService } from '@nestjs/config';
 import { AppController } from './app.controller';
 import { AppService } from './app.service';
 import { UsersModule } from './users/users.module';
+import { WebhookModule } from './webhook/webhook.module';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { User } from './users/entities/user.entity';
+import { Notification } from './webhook/entities/notification.entity';
 
 @Module({
   imports: [
@@ -31,7 +33,7 @@ import { User } from './users/entities/user.entity';
               }
             : false,
         // Entities configuration
-        entities: [User], // Add your entities here
+        entities: [User, Notification], // Add your entities here
         // Auto-load entities from the entities directory
         autoLoadEntities: true,
         // Synchronize database schema (set to false in production!)
@@ -45,6 +47,7 @@ import { User } from './users/entities/user.entity';
       inject: [ConfigService],
     }),
     UsersModule,
+    WebhookModule,
   ],
   controllers: [AppController],
   providers: [AppService],
