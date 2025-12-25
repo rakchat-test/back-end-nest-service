@@ -6,6 +6,14 @@ import { DocumentBuilder, SwaggerModule } from '@nestjs/swagger';
 async function bootstrap() {
   const app = await NestFactory.create(AppModule);
 
+  // Enable CORS - Allow all origins
+  // app.enableCors({
+  //   origin: true, // Allow all origins
+  //   methods: ['GET', 'POST', 'PUT', 'PATCH', 'DELETE', 'OPTIONS'],
+  //   allowedHeaders: ['Content-Type', 'Authorization', 'x-secret'],
+  //   credentials: true,
+  // });
+
   // Enable validation pipes globally
   app.useGlobalPipes(
     new ValidationPipe({
@@ -21,6 +29,7 @@ async function bootstrap() {
     .setDescription('The Gun full stack test API documentation')
     .setVersion('1.0')
     .addTag('users')
+    .addTag('webhook')
     .build();
 
   const document = SwaggerModule.createDocument(app, config);
