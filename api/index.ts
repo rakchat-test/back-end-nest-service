@@ -18,6 +18,9 @@ async function createApp() {
     new ExpressAdapter(expressApp),
   );
 
+  // Set global prefix (not needed for Vercel, but can be useful)
+  // app.setGlobalPrefix('api'); // Don't use this on Vercel
+
   // Enable CORS
   app.enableCors({
     origin: true,
@@ -45,8 +48,17 @@ async function createApp() {
     .build();
 
   const document = SwaggerModule.createDocument(app, config);
-  // On Vercel, use /swagger or /docs instead of /api to avoid conflict
-  SwaggerModule.setup('swagger', app, document);
+  // On Vercel, Swagger is accessible at /docs (no prefix needed)
+  SwaggerModule.setup('docs', app, document, {
+    swaggerOptions: {
+      persistAuthorization: true,
+    },
+    customCssUrl: 'https://unpkg.com/swagger-ui-dist@5.17.14/swagger-ui.css',
+    customJs: [
+      'https://unpkg.com/swagger-ui-dist@5.17.14/swagger-ui-bundle.js',
+      'https://unpkg.com/swagger-ui-dist@5.17.14/swagger-ui-standalone-preset.js',
+    ],
+  });
 
   await app.init();
   cachedApp = expressApp;
